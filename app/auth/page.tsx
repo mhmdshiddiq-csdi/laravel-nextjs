@@ -1,7 +1,8 @@
 "use client"
 import { myAppHook } from "@/context/AppProvider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface formData {
   name?: string;
@@ -18,7 +19,14 @@ const Auth: React.FC = () => {
     password: "",
     password_confirmation: "",
   })
-  const {login, register} = myAppHook()
+  const router = useRouter()
+  const {login, register, authToken, isLoading} = myAppHook()
+  useEffect(() => {
+    if (authToken) {
+      router.push('/dashboard')
+    }
+  }, [authToken, isLoading])
+
   const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -44,7 +52,7 @@ const Auth: React.FC = () => {
   
   return (
    <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="card p-4" style={{width: "400px;"}} >
+        <div className="card p-4" style={{width: "400px"}} >
         <h3 className="text-center">{isLogin ? 'Login' : 'Register'}</h3>
             <form onSubmit={handleFormSubmit}>
           {

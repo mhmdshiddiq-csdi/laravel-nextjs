@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { myAppHook } from "@/context/AppProvider";
 const Dashboard: React.FC = () => {
   return (
       <div className="container mt-4">
