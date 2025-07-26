@@ -11,6 +11,7 @@ interface AppProviderType {
   register: (name: string, email: string, password: string, password_confirmation: string) => void
   isLoading: boolean
   authToken: string|null
+  logout: () => void
 }
 
 const AppContext = createContext<AppProviderType|undefined>(undefined)
@@ -71,9 +72,15 @@ export default function AppProvider({
       setIsLoading(false)
     }
   }
-
+  const logout = () => {
+    setAuthToken(null)
+    Cookies.remove('authToken')
+    setIsLoading(false)
+    toast.success('user logged out')
+    router.push('/auth')
+  }
   return (
-    <AppContext.Provider value={{login, register, isLoading, authToken}}>
+    <AppContext.Provider value={{login, register, isLoading, authToken, logout}}>
       {isLoading ? <Loader /> : children}
     </AppContext.Provider>
   )
